@@ -1,6 +1,10 @@
 package main
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/grigata/chta-network-stats/internal/models"
+)
 
 func TestReadOptions(t *testing.T) {
 	tests := []struct {
@@ -30,5 +34,25 @@ func TestReadOptionsRejectsInvalidInput(t *testing.T) {
 		if _, err := readOptions(args); err == nil {
 			t.Fatalf("expected error for %v", args)
 		}
+	}
+}
+
+func TestTagColumnWidthUsesLongestMinerTag(t *testing.T) {
+	tags := []models.TagStats{
+		{Name: "Unknown"},
+		{Name: "ckpool-lhr-chta/[::H3L10SP00L::]"},
+	}
+	if got, want := tagColumnWidth(tags), len("ckpool-lhr-chta/[::H3L10SP00L::]"); got != want {
+		t.Fatalf("width=%d, want %d", got, want)
+	}
+}
+
+func TestBlockTagColumnWidthUsesLongestMinerTag(t *testing.T) {
+	blocks := []models.NetworkBlock{
+		{MinerTag: "Unknown"},
+		{MinerTag: "ckpool/Kraskus CHTA Solo"},
+	}
+	if got, want := blockTagColumnWidth(blocks), len("ckpool/Kraskus CHTA Solo"); got != want {
+		t.Fatalf("width=%d, want %d", got, want)
 	}
 }

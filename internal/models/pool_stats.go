@@ -1,6 +1,6 @@
 package models
 
-type PoolStats struct {
+type TagStats struct {
 	Name          string
 	TotalBlocks   int
 	NormalBlocks  int

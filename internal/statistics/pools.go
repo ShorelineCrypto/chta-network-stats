@@ -6,18 +6,18 @@ import (
 	"github.com/grigata/chta-network-stats/internal/models"
 )
 
-func AnalyzePools(blocks []models.NetworkBlock) []models.PoolStats {
+func AnalyzeTags(blocks []models.NetworkBlock) []models.TagStats {
 
-	pools := make(map[string]*models.PoolStats)
+	tags := make(map[string]*models.TagStats)
 
 	for _, block := range blocks {
 
-		ps, ok := pools[block.Pool]
+		ps, ok := tags[block.MinerTag]
 		if !ok {
-			ps = &models.PoolStats{
-				Name: block.Pool,
+			ps = &models.TagStats{
+				Name: block.MinerTag,
 			}
-			pools[block.Pool] = ps
+			tags[block.MinerTag] = ps
 		}
 
 		ps.TotalBlocks++
@@ -31,14 +31,14 @@ func AnalyzePools(blocks []models.NetworkBlock) []models.PoolStats {
 		}
 	}
 
-	result := make([]models.PoolStats, 0, len(pools))
+	result := make([]models.TagStats, 0, len(tags))
 
-	for _, pool := range pools {
-		pool.Percent =
-			float64(pool.TotalBlocks) * 100 /
+	for _, tag := range tags {
+		tag.Percent =
+			float64(tag.TotalBlocks) * 100 /
 				float64(len(blocks))
 
-		result = append(result, *pool)
+		result = append(result, *tag)
 	}
 
 	sort.Slice(result, func(i, j int) bool {

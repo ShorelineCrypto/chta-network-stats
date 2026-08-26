@@ -32,7 +32,7 @@ type Data struct {
 	GeneratedAt time.Time             `json:"generated_at"`
 	ExplorerURL string                `json:"explorer_url"`
 	Statistics  statistics.Statistics `json:"statistics"`
-	Pools       []models.PoolStats    `json:"pools"`
+	Tags        []models.TagStats     `json:"tags"`
 	Blocks      []models.NetworkBlock `json:"blocks"`
 }
 
@@ -41,7 +41,7 @@ func NewData(source string, height int64, duration time.Duration, blocks []model
 		AppName: version.AppName, Version: version.AppVersion, Source: source,
 		Height: height, ScanSeconds: duration.Seconds(), GeneratedAt: time.Now(),
 		ExplorerURL: ExplorerURL, Statistics: statistics.Calculate(blocks),
-		Pools: statistics.AnalyzePools(blocks), Blocks: blocks,
+		Tags: statistics.AnalyzeTags(blocks), Blocks: blocks,
 	}
 }
 

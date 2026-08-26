@@ -13,5 +13,5 @@ type NetworkBlock struct {
 	Type         string
 	CoinbaseTxID string
 	CoinbaseHex  string
-	Pool         string
+	MinerTag     string `json:"miner_tag"`
 }

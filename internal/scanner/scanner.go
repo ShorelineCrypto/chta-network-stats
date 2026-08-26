@@ -92,7 +92,7 @@ func (s *Scanner) ReadLastBlocks(
 
 		coinbaseTxID := ""
 		coinbaseHex := ""
-		pool := "Unknown"
+		minerTag := "Unknown"
 
 		if len(currentBlock.Tx) > 0 {
 			coinbaseTxID = currentBlock.Tx[0]
@@ -108,8 +108,7 @@ func (s *Scanner) ReadLastBlocks(
 
 			if len(tx.Vin) > 0 {
 				coinbaseHex = tx.Vin[0].Coinbase
-				coinbaseText := parser.DecodeCoinbaseText(coinbaseHex)
-				pool = parser.DetectPool(coinbaseText)
+				minerTag = parser.ExtractCoinbaseTag(coinbaseHex)
 			}
 		}
 
@@ -124,7 +123,7 @@ func (s *Scanner) ReadLastBlocks(
 			Type:         blockType(currentBlock.Difficulty),
 			CoinbaseTxID: coinbaseTxID,
 			CoinbaseHex:  coinbaseHex,
-			Pool:         pool,
+			MinerTag:     minerTag,
 		})
 		if progress != nil {
 			progress(index+1, count)

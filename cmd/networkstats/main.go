@@ -75,7 +75,7 @@ func main() {
 	)
 
 	stats := statistics.Calculate(blocks)
-	poolStats := statistics.AnalyzePools(blocks)
+	tagStats := statistics.AnalyzeTags(blocks)
 
 	if options.Web {
 		data := dashboard.NewData(source.Name, source.Height, scanDuration, blocks)
@@ -89,7 +89,7 @@ func main() {
 
 	printBlockTable(blocks)
 	printStatistics(stats, source.Name, scanDuration)
-	printPoolAnalysis(poolStats)
+	printTagAnalysis(tagStats)
 	waitForEnter()
 }
 
@@ -152,31 +152,46 @@ func printStartup(
 }
 
 func printBlockTable(blocks []models.NetworkBlock) {
+	tagWidth := blockTagColumnWidth(blocks)
+	separatorWidth := 10 + 1 + tagWidth + 1 + 14 + 1 + 10 + 1 + 8 + 1 + 5
+
 	fmt.Println()
 	fmt.Printf("Last %d network blocks\n", len(blocks))
-	fmt.Println("--------------------------------------------------------------------------------")
+	fmt.Println(strings.Repeat("-", separatorWidth))
 	fmt.Printf(
-		"%-10s %-18s %-14s %-10s %-8s %-5s\n",
+		"%-10s %-*s %-14s %-10s %-8s %-5s\n",
 		"Height",
-		"Pool",
+		tagWidth,
+		"Miner / Tag",
 		"Difficulty",
 		"Type",
 		"Gap",
 		"Tx",
 	)
-	fmt.Println("--------------------------------------------------------------------------------")
+	fmt.Println(strings.Repeat("-", separatorWidth))
 
 	for _, block := range blocks {
 		fmt.Printf(
-			"%-10d %-18s %-14s %-10s %+7ds %-5d\n",
+			"%-10d %-*s %-14s %-10s %+7ds %-5d\n",
 			block.Height,
-			block.Pool,
+			tagWidth,
+			block.MinerTag,
 			formatDifficulty(block.Difficulty),
 			block.Type,
 			block.Gap,
 			block.TxCount,
 		)
 	}
+}
+
+func blockTagColumnWidth(blocks []models.NetworkBlock) int {
+	width := len("Miner / Tag")
+	for _, block := range blocks {
+		if len(block.MinerTag) > width {
+			width = len(block.MinerTag)
+		}
+	}
+	return width
 }
 
 func printStatistics(
@@ -240,28 +255,31 @@ func waitForEnter() {
 	fmt.Print("Press Enter to exit...")
 	fmt.Scanln()
 }
-func printPoolAnalysis(pools []models.PoolStats) {
+func printTagAnalysis(tags []models.TagStats) {
 
 	fmt.Println()
 	fmt.Println("============================================================")
-	fmt.Println("Pool Analysis")
+	fmt.Println("Miner / Tag Analysis")
 	fmt.Println("============================================================")
 
+	nameWidth := tagColumnWidth(tags)
 	fmt.Printf(
-		"%-18s %6s %7s %10s %7s\n",
-		"Pool",
+		"%-*s %6s %7s %10s %7s\n",
+		nameWidth,
+		"Miner / Tag",
 		"Total",
 		"Normal",
 		"LOW-DIFF",
 		"%",
 	)
 
-	fmt.Println("------------------------------------------------------------")
+	fmt.Println(strings.Repeat("-", nameWidth+35))
 
-	for _, p := range pools {
+	for _, p := range tags {
 
 		fmt.Printf(
-			"%-18s %6d %7d %10d %6.1f%%\n",
+			"%-*s %6d %7d %10d %6.1f%%\n",
+			nameWidth,
 			p.Name,
 			p.TotalBlocks,
 			p.NormalBlocks,
@@ -269,4 +287,14 @@ func printPoolAnalysis(pools []models.PoolStats) {
 			p.Percent,
 		)
 	}
+}
+
+func tagColumnWidth(tags []models.TagStats) int {
+	width := len("Miner / Tag")
+	for _, tag := range tags {
+		if len(tag.Name) > width {
+			width = len(tag.Name)
+		}
+	}
+	return width
 }

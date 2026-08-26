@@ -16,14 +16,14 @@ type Statistics struct {
 	MinGap     int64
 	MaxGap     int64
 
-	Pools map[string]int
+	Tags map[string]int
 }
 
 func Calculate(blocks []models.NetworkBlock) Statistics {
 
 	stats := Statistics{
 		TotalBlocks: len(blocks),
-		Pools:       make(map[string]int),
+		Tags:        make(map[string]int),
 	}
 
 	if len(blocks) == 0 {
@@ -36,7 +36,7 @@ func Calculate(blocks []models.NetworkBlock) Statistics {
 
 	for _, block := range blocks {
 
-		stats.Pools[block.Pool]++
+		stats.Tags[block.MinerTag]++
 
 		if block.Type == "LOW-DIFF" {
 			stats.LowDiffBlocks++
@@ -60,11 +60,11 @@ func Calculate(blocks []models.NetworkBlock) Statistics {
 	return stats
 
 }
-func SortedPools(stats Statistics) []PoolStat {
+func SortedTags(stats Statistics) []PoolStat {
 
-	pools := make([]PoolStat, 0, len(stats.Pools))
+	pools := make([]PoolStat, 0, len(stats.Tags))
 
-	for name, blocks := range stats.Pools {
+	for name, blocks := range stats.Tags {
 
 		pools = append(pools, PoolStat{
 			Name:    name,

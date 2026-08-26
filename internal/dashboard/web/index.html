@@ -8,7 +8,7 @@
   <section class="cards" id="cards"></section>
   <section class="dashboard-grid">
     <article class="panel types-panel"><h2>Block Type Distribution</h2><div id="types" class="donut-area"></div></article>
-    <article class="panel pools-panel"><h2>Pool Distribution (by Blocks)</h2><div id="pools" class="bars"></div></article>
+    <article class="panel pools-panel"><h2>Miner / Tag Distribution (by Blocks)</h2><div id="tags" class="bars"></div></article>
     <article class="panel chart-panel"><h2>Difficulty Chart (Log Scale)</h2><div class="canvas-wrap"><canvas id="difficulty"></canvas><div id="tooltip" class="tooltip"></div></div></article>
     <aside class="statistics-column">
       <article class="panel stat-panel"><h2>Network Statistics</h2><div id="networkStats"></div></article>
@@ -16,7 +16,7 @@
       <article class="panel stat-panel"><h2>Streak Analysis</h2><div id="streakStats"></div></article>
       <article class="panel stat-panel"><h2>Time Range</h2><div id="timeStats"></div></article>
     </aside>
-    <article class="panel blocks-panel"><div class="panel-title"><h2>Recent Blocks (Last <span id="blockCount"></span>)</h2><label>⌕ <input id="filter" placeholder="Filter blocks"></label></div><div class="table-wrap"><table><thead><tr><th>HEIGHT</th><th>TIME</th><th>POOL</th><th>DIFFICULTY</th><th>TYPE</th><th>GAP</th><th>TX COUNT</th><th>LINK</th></tr></thead><tbody id="blockRows"></tbody></table></div></article>
+    <article class="panel blocks-panel"><div class="panel-title"><h2>Recent Blocks (Last <span id="blockCount"></span>)</h2><label>⌕ <input id="filter" placeholder="Filter blocks"></label></div><div class="table-wrap"><table><thead><tr><th>HEIGHT</th><th>TIME</th><th>MINER / TAG</th><th>DIFFICULTY</th><th>TYPE</th><th>GAP</th><th>TX COUNT</th><th>LINK</th></tr></thead><tbody id="blockRows"></tbody></table></div></article>
   </section>
   <footer><span id="footerVersion"></span><span>Cheetahcoin (CHTA) Blockchain Explorer: <a id="explorer" target="_blank" rel="noreferrer">Open Explorer</a></span><span>Made with ♥ for the Cheetahcoin community</span></footer>
 </main><script src="/app.js"></script></body></html>
